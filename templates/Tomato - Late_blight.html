@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"
+      integrity="sha384-VCmXjywReHh4PwowAiWNagnWcLhlEJLA5buUprzK8rxFgeH0kww/aWY76TfkUoSX"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/twilio@3.69.1/dist/twilio.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twilio/3.69.1/twilio.js"></script>
+
+    <!-- YouTube API script -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <title>TOMATO LEAF DISEASE PREDICTION</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      #videoContainer {
+        width: 500px;
+        height: 500px;
+        margin: auto;
+      }
+    </style>
+  </head>
+
+  <body background="{{url_for('static',filename = 'images/Back.jpg')}}">
+    <div>
+      <h1 style="text-align: center; font-size: 4rem">
+        Predict Tomato Leaf Disease & Get Cure
+      </h1>
+    </div>
+
+    <br />
+    <br />
+
+    <div class="container my-2">
+      <div class="row mb-5">
+        <div class="col-sm" style="margin-bottom: 23px">
+          <span class="border border-primary" id="mediaContainer">
+            <!-- Media container (either image or video) -->
+            <img
+              src="{{url_for('static',filename = 'images/Tomato___Late_blight.JPG' )}}"
+              alt="User Image"
+              style="width: 500px; height: 500px"
+              id="mediaContent"
+            />
+            <div id="videoContainer" style="display: none"></div>
+          </span>
+          <iframe
+            id="youtubeIframe"
+            width="500"
+            height="500"
+            src="https://www.youtube.com/embed/rG7YdE3JJwg?si=ujwtU-nH-qjDk83m"
+            title="Late"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+            style="display: none"
+          ></iframe>
+        </div>
+
+        <div class="col-sm">
+          <div>
+            <h1
+              style="
+                padding: 15px;
+                background-color: rgb(15, 15, 15);
+                color: white;
+              "
+              class="text-center mb-5 content-h1 rounded"
+            >
+              {{pred_output}}
+            </h1>
+          </div>
+          <div class="details">
+            <h4><b> Treatment : </b></h4>
+            <h6>
+              Tomatoes that have early blight require immediate attention before
+              the disease takes over the plants. Thoroughly spray the plant
+              (bottoms of leaves also) with Bonide Liquid Copper Fungicide
+              concentrate or Bonide Tomato & Vegetable. Both of these treatments
+              are organic..<br /><br />
+            </h6>
+            <button
+              id="showVideoButton"
+              class="btn btn-dark"
+              onclick="showVideo()"
+              type="button"
+            >
+              Show Video
+            </button><button onclick="logout()" type="button" class="btn btn-dark">
+              Log Out
+            </button>
+
+            <script>
+              function logout() {
+                // Redirect to http://localhost:3001/
+                window.location.href = "http://localhost:3001/";
+              }
+            </script>
+            <!-- <button
+              id="pingButton"
+              class="btn btn-primary"
+              onclick="sendTwilioMessage()"
+            >
+              Ping Me
+            </button> -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Your script for YouTube video -->
+    <script>
+      function sendTwilioMessage() {
+        // You need to replace these values with your Twilio Account SID, Auth Token, and Twilio phone number
+        const accountSid = "AC37e199a5d16f8c9d83b9a1cc587692ce";
+        const authToken = "c23140f1d563d865e6820c794f781a7e";
+        const twilioPhoneNumber = "+12512908056";
+
+        // Create a Twilio client
+        const client = new Twilio(accountSid, authToken);
+
+        // Customize your message
+        const messageBody = "Hello! The user wants to talk through Twilio.";
+
+        // You need to replace 'to' with the recipient's phone number
+        const toPhoneNumber = "+919133333978";
+
+        // Send the message using Twilio's API
+        client.messages
+          .create({
+            body: messageBody,
+            from: twilioPhoneNumber,
+            to: toPhoneNumber,
+          })
+          .then((message) => {
+            console.log("Message sent successfully:", message.sid);
+            alert("Message sent successfully!");
+          })
+          .catch((error) => {
+            console.error("Error sending message:", error.message);
+            alert("Error sending message. Please try again.");
+          });
+      }
+      var player;
+</script>
+
+    <!-- Your script for YouTube video -->
+    <script>
+      var player;
+
+      function showVideo() {
+        var videoIframe = document.getElementById("youtubeIframe");
+
+        // Toggle the display property of the YouTube iframe
+        if (videoIframe.style.display === "none") {
+          // If the iframe is hidden, show it
+          document.getElementById("mediaContainer").style.display = "none";
+          document.getElementById("videoContainer").style.display = "block";
+          console.log("sdfx");
+          videoIframe.style.display = "block";
+
+          document.getElementById("showVideoButton").innerText = "Hide Video";
+        } else {
+          // If the iframe is visible, hide it
+          document.getElementById("mediaContainer").style.display = "block";
+          document.getElementById("videoContainer").style.display = "none";
+          console.log("sdfx");
+          videoIframe.style.display = "none";
+          document.getElementById("showVideoButton").innerText = "Show Video";
+        }
+      }
+
+      function onYouTubeIframeAPIReady() {
+        // Initialize the YouTube video directly
+        player = new YT.Player("videoContainer", {
+          height: "500",
+          width: "500",
+          videoId: "rG7YdE3JJwg",
+          playerVars: {
+            autoplay: 0,
+            controls: 1,
+            rel: 0,
+            showinfo: 0,
+            iv_load_policy: 3,
+            modestbranding: 1,
+            start: 0,
+          },
+        });
+        console.log("YouTube video initialized");
+      }
+    </script>
+  </body>
+</html>

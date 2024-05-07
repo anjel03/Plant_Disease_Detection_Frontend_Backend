@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css"
+      integrity="sha384-VCmXjywReHh4PwowAiWNagnWcLhlEJLA5buUprzK8rxFgeH0kww/aWY76TfkUoSX"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/twilio@3.69.1/dist/twilio.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twilio/3.69.1/twilio.js"></script>
+
+    <!-- YouTube API script -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <title>TOMATO LEAF DISEASE PREDICTION</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      #videoContainer {
+        width: 500px;
+        height: 500px;
+        margin: auto;
+      }
+    </style>
+  </head>
+
+  <body background="{{url_for('static',filename = 'images/Back.jpg')}}">
+    <div>
+      <h1 style="text-align: center; font-size: 4rem">
+        Predict Tomato Leaf Disease & Get Cure
+      </h1>
+    </div>
+
+    <br />
+    <br />
+
+    <div class="container my-2">
+      <div class="row mb-5">
+        <div class="col-sm" style="margin-bottom: 23px">
+          <span class="border border-primary" id="mediaContainer">
+            <img
+              src="{{url_for('static',filename = 'images/Tomato___healthy .JPG' )}}"
+              alt="User Image"
+              style="width: 500px; height: 500px"
+              id="mediaContent"
+            />
+            <div id="videoContainer" style="display: none"></div>
+          </span>
+          <iframe
+            id="youtubeIframe"
+            width="500"
+            height="500"
+            src="https://www.youtube.com/embed/gjMIh19zH7k?si=uxuYB1HFst_x6z1h"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+            style="display: none"
+          ></iframe>
+        </div>
+
+        <div class="col-sm">
+          <div>
+            <h1
+              style="
+                padding: 15px;
+                background-color: rgb(15, 15, 15);
+                color: white;
+              "
+              class="text-center mb-5 content-h1 rounded"
+            >
+              {{pred_output}}
+            </h1>
+          </div>
+          <div class="details">
+            <h4><b> There is no disease on the Tomato leaf. </b></h4>
+            <button
+              id="showVideoButton"
+              class="btn btn-dark"
+              onclick="showVideo()"
+              type="button"
+            >
+              Show Video</button
+            ><button onclick="logout()" type="button" class="btn btn-dark">
+              Log Out
+            </button>
+
+            <script>
+              function logout() {
+                // Redirect to http://localhost:3001/
+                window.location.href = "http://localhost:3001/";
+              }
+            </script>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      var player;
+
+      function showVideo() {
+        var videoIframe = document.getElementById("youtubeIframe");
+
+        // Toggle the display property of the YouTube iframe
+        if (videoIframe.style.display === "none") {
+          // If the iframe is hidden, show it
+          document.getElementById("mediaContainer").style.display = "none";
+          document.getElementById("videoContainer").style.display = "block";
+          console.log("sdfx");
+          videoIframe.style.display = "block";
+
+          document.getElementById("showVideoButton").innerText = "Hide Video";
+        } else {
+          // If the iframe is visible, hide it
+          document.getElementById("mediaContainer").style.display = "block";
+          document.getElementById("videoContainer").style.display = "none";
+          console.log("sdfx");
+          videoIframe.style.display = "none";
+          document.getElementById("showVideoButton").innerText = "Show Video";
+        }
+      }
+
+      function onYouTubeIframeAPIReady() {
+        // Initialize the YouTube video directly
+        player = new YT.Player("videoContainer", {
+          height: "500",
+          width: "500",
+          videoId: "gjMIh19zH7k",
+          playerVars: {
+            autoplay: 0,
+            controls: 1,
+            rel: 0,
+            showinfo: 0,
+            iv_load_policy: 3,
+            modestbranding: 1,
+            start: 0,
+          },
+        });
+        console.log("YouTube video initialized");
+      }
+    </script>
+  </body>
+</html>
